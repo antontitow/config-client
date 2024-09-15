@@ -12,4 +12,5 @@ import org.springframework.context.annotation.Configuration;
 public class ExampleConfiguration {
 
   private String example;
+  private String clientRest;
 }

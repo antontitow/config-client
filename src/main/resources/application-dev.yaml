@@ -1,5 +1,11 @@
 spring:
   application:
     name: config-client
-
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8082
+      fail-fast: false
+  config:
+    import: configserver:http://localhost:8082
 example.example: dev local
