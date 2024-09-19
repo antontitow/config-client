@@ -4,6 +4,27 @@ spring:
   cloud:
     config:
       enabled: false
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/tony
+    username: tony
+    password: tony
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.PostgreSQLDialect"
+resilience4j:
+  circuitbreaker:
+    instances:
+      config-client:
+        failureRateThreshold: 50
+        registerHealthIndicator: true
+        waitDurationInOpenState: 1s
+
 
 example.example: default
 example.clientRest: default
+server:
+  port: 8081

@@ -1,6 +1,8 @@
 package com.example.config_client.controller;
 
 import com.example.config_client.config.ExampleConfiguration;
+import com.example.config_client.service.ClientSenderI;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,16 +17,18 @@ import org.springframework.web.client.RestTemplate;
 public class DiscoveryLoadBalancerController {
 
     private final ExampleConfiguration exampleConfiguration;
-    private final @Qualifier("restTemplateLoadBalancer") RestTemplate restTemplate;
+    private final ClientSenderI sender;
 
+    @CircuitBreaker(name = "discovery", fallbackMethod = "fallSending")
     @GetMapping("discovery/loadbalanced")
     String getService() {
         log.info("---Discovery loadbalancer---");
         log.info(exampleConfiguration.getClientRest() + "/lastCard");
-        return restTemplate.exchange("http://" +exampleConfiguration.getClientRest()+ "/lastCard",
-                HttpMethod.GET,
-                null,
-                String.class
-                ).getBody();
+return sender.sendRequest();
+    }
+
+    public String fallSending(){
+        log.info("discovery load FALLL");
+        return "dfdfdf";
     }
 }

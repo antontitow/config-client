@@ -1,6 +1,7 @@
 package com.example.config_client.controller;
 
 import com.example.config_client.config.ExampleConfiguration;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -19,6 +20,7 @@ public class DiscoveryController {
     private final ExampleConfiguration exampleConfiguration;
 
     @GetMapping("discovery")
+    @CircuitBreaker(name = "discovery", fallbackMethod = "fallSending")
     String getService() {
         RestTemplate restTemplate = new RestTemplate();
         val instance = discoveryClient.getInstances(exampleConfiguration.getClientRest());
@@ -32,5 +34,10 @@ public class DiscoveryController {
                 null,
                 String.class
                 ).getBody();
+    }
+
+    public String fallSending(){
+        log.info("load FALLL");
+        return "dfdfdf";
     }
 }
